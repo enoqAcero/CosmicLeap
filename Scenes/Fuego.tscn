@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://c6crlmwfd0xke"]
+
+[ext_resource type="Texture2D" uid="uid://iq0t87nid5tb" path="res://Assets/Skins/Fuego/fuegoJumper.png" id="1_houwj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_04gep"]
+atlas = ExtResource("1_houwj")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n7nex"]
+atlas = ExtResource("1_houwj")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5cokx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_04gep")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n7nex")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_5cokx")
+autoplay = "default"

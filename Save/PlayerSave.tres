@@ -1,0 +1,60 @@
+[gd_resource type="Resource" script_class="Player" load_steps=13 format=3 uid="uid://gnuafa743k1x"]
+
+[ext_resource type="Script" path="res://Save/PlayerResource.gd" id="1_i001p"]
+[ext_resource type="Texture2D" uid="uid://cxesvx3xme7oe" path="res://Assets/Skins/Player/espadachinFrente.png" id="2_tvgap"]
+[ext_resource type="Script" path="res://Save/SkinsResource.gd" id="3_yugwr"]
+[ext_resource type="Texture2D" uid="uid://bg7t8nm0wjdsb" path="res://Assets/michi/Kibble.png" id="4_6ghcy"]
+[ext_resource type="Texture2D" uid="uid://doi6lepfku28u" path="res://Assets/michi/Brush.png" id="5_1rxab"]
+[ext_resource type="Texture2D" uid="uid://b0fjcjcox5umd" path="res://Assets/michi/Ball.png" id="6_ggejp"]
+[ext_resource type="Texture2D" uid="uid://c6kwxhe4bku2h" path="res://Assets/michi/TunaCan.png" id="7_02vbq"]
+
+[sub_resource type="Resource" id="Resource_gv21j"]
+script = ExtResource("3_yugwr")
+skinType = ExtResource("2_tvgap")
+name = "Laser"
+price = 100
+owned = true
+active = false
+
+[sub_resource type="Resource" id="Resource_2x8op"]
+script = ExtResource("3_yugwr")
+skinType = ExtResource("4_6ghcy")
+name = "Kibble"
+price = 100
+owned = false
+active = false
+
+[sub_resource type="Resource" id="Resource_avw3f"]
+script = ExtResource("3_yugwr")
+skinType = ExtResource("5_1rxab")
+name = "Brush"
+price = 100
+owned = false
+active = false
+
+[sub_resource type="Resource" id="Resource_aoqou"]
+script = ExtResource("3_yugwr")
+skinType = ExtResource("6_ggejp")
+name = "Ball"
+price = 100
+owned = false
+active = false
+
+[sub_resource type="Resource" id="Resource_bps3j"]
+script = ExtResource("3_yugwr")
+skinType = ExtResource("7_02vbq")
+name = "Tuna"
+price = 200
+owned = false
+active = false
+
+[resource]
+script = ExtResource("1_i001p")
+highScore = 6454
+coins = 28
+skins = Array[ExtResource("3_yugwr")]([SubResource("Resource_gv21j"), SubResource("Resource_2x8op"), SubResource("Resource_avw3f"), SubResource("Resource_aoqou"), SubResource("Resource_bps3j")])
+StarPowerLvl = 0
+MagnetLvl = 0
+CoinShowerLvl = 0
+MultiplierLvl = 0
+JumpForceLvl = 0

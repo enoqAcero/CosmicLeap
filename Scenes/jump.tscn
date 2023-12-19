@@ -1,0 +1,160 @@
+[gd_scene load_steps=14 format=3 uid="uid://bce0sjufq2vpv"]
+
+[ext_resource type="Script" path="res://Scripts/jump.gd" id="1_8coxb"]
+[ext_resource type="PackedScene" uid="uid://cjhwl25kc14sd" path="res://Scenes/game_over.tscn" id="2_8lq24"]
+[ext_resource type="Texture2D" uid="uid://cp27snuwgp2kp" path="res://Assets/Background/backgroundSuelo.png" id="2_prn5v"]
+[ext_resource type="PackedScene" uid="uid://cnqryqp4o2pwv" path="res://Scenes/JoyStick.tscn" id="3_m7bn0"]
+[ext_resource type="PackedScene" uid="uid://bdytui0mv5wvs" path="res://Scenes/floor.tscn" id="4_o4pvo"]
+[ext_resource type="PackedScene" uid="uid://dn7j1pie1dv7b" path="res://Scenes/menu.tscn" id="6_eye58"]
+[ext_resource type="PackedScene" uid="uid://bmus7qr2lr2hc" path="res://Scenes/store.tscn" id="7_ajhnr"]
+[ext_resource type="PackedScene" uid="uid://c3e78b61i72l2" path="res://Scenes/settings.tscn" id="8_ilwty"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4n8kq"]
+size = Vector2(343.5, 2237)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s5xsp"]
+size = Vector2(330, 2241)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j4drw"]
+size = Vector2(2228, 388)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sjim0"]
+size = Vector2(2255, 321)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_slx8m"]
+size = Vector2(164, 74)
+
+[node name="Jump" type="Node2D" groups=["Coin", "CoinShower", "MagnetPower", "MultiplierPower", "StarPower", "item"]]
+script = ExtResource("1_8coxb")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2(240, 480)
+motion_mirroring = Vector2(0, 750)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+texture = ExtResource("2_prn5v")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(240, 478)
+texture = ExtResource("2_prn5v")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(240, 427)
+limit_left = 0
+limit_right = 480
+limit_bottom = 854
+
+[node name="Right" type="StaticBody2D" parent="Camera2D"]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Camera2D/Right"]
+position = Vector2(407, -65)
+shape = SubResource("RectangleShape2D_4n8kq")
+
+[node name="Left" type="StaticBody2D" parent="Camera2D"]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Camera2D/Left"]
+position = Vector2(-403, -64)
+shape = SubResource("RectangleShape2D_s5xsp")
+
+[node name="Up" type="Area2D" parent="Camera2D"]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Camera2D/Up"]
+position = Vector2(332, -519)
+shape = SubResource("RectangleShape2D_j4drw")
+
+[node name="Down" type="Area2D" parent="Camera2D"]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Camera2D/Down"]
+position = Vector2(-15, 589)
+shape = SubResource("RectangleShape2D_sjim0")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Score" type="Label" parent="CanvasLayer"]
+offset_left = 16.0
+offset_top = 20.0
+offset_right = 180.0
+offset_bottom = 71.0
+
+[node name="HighScore" type="Label" parent="CanvasLayer"]
+offset_left = 264.0
+offset_top = 12.0
+offset_right = 458.0
+offset_bottom = 69.0
+
+[node name="FloorDistance" type="Label" parent="CanvasLayer"]
+offset_left = 8.0
+offset_top = 752.0
+offset_right = 210.0
+offset_bottom = 803.0
+
+[node name="Multiplier" type="Label" parent="CanvasLayer"]
+offset_left = 268.0
+offset_top = 752.0
+offset_right = 472.0
+offset_bottom = 809.0
+
+[node name="GameOver" parent="CanvasLayer" instance=ExtResource("2_8lq24")]
+offset_left = 166.0
+offset_top = 290.0
+offset_right = 166.0
+offset_bottom = 290.0
+
+[node name="JoyStick" parent="CanvasLayer" instance=ExtResource("3_m7bn0")]
+visible = false
+
+[node name="Floor" parent="." instance=ExtResource("4_o4pvo")]
+position = Vector2(0, 830)
+
+[node name="Menu" parent="." instance=ExtResource("6_eye58")]
+
+[node name="store" parent="." instance=ExtResource("7_ajhnr")]
+visible = false
+
+[node name="settings" parent="." instance=ExtResource("8_ilwty")]
+visible = false
+
+[node name="AreaBtnControl" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaBtnControl"]
+position = Vector2(234, 534)
+shape = SubResource("RectangleShape2D_slx8m")
+
+[node name="ObstacleTimer" type="Timer" parent="."]
+wait_time = 4.0
+autostart = true
+
+[node name="StarPowerTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="CoinTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="MagnetPowerTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="CoinShowerPowerTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[connection signal="body_entered" from="Camera2D/Up" to="." method="_on_up_body_entered"]
+[connection signal="body_exited" from="Camera2D/Up" to="." method="_on_up_body_exited"]
+[connection signal="body_entered" from="Camera2D/Down" to="." method="_on_down_body_entered"]
+[connection signal="body_exited" from="Camera2D/Down" to="." method="_on_down_body_exited"]
+[connection signal="timeout" from="ObstacleTimer" to="." method="_on_obstacle_timer_timeout"]
+[connection signal="timeout" from="StarPowerTimer" to="." method="_on_star_power_timer_timeout"]
+[connection signal="timeout" from="CoinTimer" to="." method="_on_coin_timer_timeout"]
+[connection signal="timeout" from="MagnetPowerTimer" to="." method="_on_magnet_power_timer_timeout"]
+[connection signal="timeout" from="CoinShowerPowerTimer" to="." method="_on_coin_shower_power_timer_timeout"]

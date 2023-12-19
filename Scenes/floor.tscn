@@ -1,0 +1,77 @@
+[gd_scene load_steps=9 format=3 uid="uid://bdytui0mv5wvs"]
+
+[ext_resource type="Texture2D" uid="uid://nb8sd4wo2yr2" path="res://Assets/trampolin.png" id="1_hew40"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b8b32"]
+atlas = ExtResource("1_hew40")
+region = Rect2(0, 0, 480, 750)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ti70"]
+atlas = ExtResource("1_hew40")
+region = Rect2(480, 0, 480, 750)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bit11"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b8b32")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ti70")
+}],
+"loop": false,
+"name": &"jump",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m4g6c"]
+size = Vector2(541.5, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_li713"]
+size = Vector2(541, 233)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_01hkq"]
+size = Vector2(587, 25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7q3m1"]
+size = Vector2(627, 54.5)
+
+[node name="Floor" type="StaticBody2D"]
+collision_layer = 3
+collision_mask = 3
+metadata/_edit_vertical_guides_ = [0.0, 480.0]
+metadata/_edit_horizontal_guides_ = [28.0, -768.0]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(240, -234)
+scale = Vector2(1, 0.828)
+sprite_frames = SubResource("SpriteFrames_bit11")
+animation = &"jump"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(231.25, 2)
+shape = SubResource("RectangleShape2D_m4g6c")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(238.5, -106.5)
+shape = SubResource("RectangleShape2D_li713")
+
+[node name="Area2D2" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D2"]
+position = Vector2(247.5, 2.5)
+shape = SubResource("RectangleShape2D_01hkq")
+
+[node name="Area2D3" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D3"]
+position = Vector2(244.5, -12.75)
+shape = SubResource("RectangleShape2D_7q3m1")

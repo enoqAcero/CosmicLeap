@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://cnqryqp4o2pwv"]
+
+[ext_resource type="Script" path="res://Scripts/JoyStick.gd" id="1_8pisp"]
+[ext_resource type="Texture2D" uid="uid://b025xnqjvxwxp" path="res://Assets/Asteroids/asteroide4.png" id="2_m845q"]
+[ext_resource type="Texture2D" uid="uid://bb7di4uhsggm6" path="res://Assets/Asteroids/asteroide1.png" id="3_ivcq8"]
+
+[node name="JoyStick" type="Node2D"]
+script = ExtResource("1_8pisp")
+
+[node name="Ring" type="Sprite2D" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+position = Vector2(261.75, 257.75)
+scale = Vector2(8.17123, 8.26056)
+texture = ExtResource("2_m845q")
+
+[node name="Knob" type="Sprite2D" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+position = Vector2(247, 238)
+scale = Vector2(0.802817, 0.834507)
+texture = ExtResource("3_ivcq8")
+
+[node name="Button" type="Button" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+offset_left = -451.0
+offset_top = -465.0
+offset_right = 1008.0
+offset_bottom = 1363.0
+
+[connection signal="button_down" from="Button" to="." method="_on_button_button_down"]
+[connection signal="button_up" from="Button" to="." method="_on_button_button_up"]

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://dulyvy2lbc56v"]
+
+[ext_resource type="Texture2D" uid="uid://bb7di4uhsggm6" path="res://Assets/Asteroids/asteroide1.png" id="1_d5csa"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_r3hca"]
+radius = 70.0071
+
+[node name="Area2D" type="Area2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_d5csa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_r3hca")
