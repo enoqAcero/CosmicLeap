@@ -1,0 +1,126 @@
+[gd_scene load_steps=10 format=3 uid="uid://b5ttpy6wtets0"]
+
+[ext_resource type="Script" path="res://Scripts/mePage.gd" id="1_wr40p"]
+[ext_resource type="PackedScene" uid="uid://db8abnd3g8ikh" path="res://Scenes/Obstacles/items/CoinShowerPower.tscn" id="2_2q8ms"]
+[ext_resource type="PackedScene" uid="uid://r8ol1dq112gq" path="res://Scenes/Obstacles/items/MagnetPower.tscn" id="3_1658o"]
+[ext_resource type="Texture2D" uid="uid://budytk2oqkg4w" path="res://Assets/ProgressBar/back.png" id="3_wrt3b"]
+[ext_resource type="Texture2D" uid="uid://djjrygoq873bm" path="res://Assets/ProgressBar/frame.png" id="4_dlirp"]
+[ext_resource type="PackedScene" uid="uid://cs6a4y3jeh2sl" path="res://Scenes/Obstacles/items/MultiplierPower.tscn" id="4_y0cd3"]
+[ext_resource type="Texture2D" uid="uid://b556q716g3b8" path="res://Assets/ProgressBar/over.png" id="5_8vptd"]
+[ext_resource type="PackedScene" uid="uid://1074dokjjjat" path="res://Scenes/Obstacles/items/StarPower.tscn" id="5_awjm0"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_j4jt2"]
+font_size = 10
+
+[node name="mePage" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wr40p")
+metadata/_edit_vertical_guides_ = [78.0]
+metadata/_edit_horizontal_guides_ = [220.0]
+
+[node name="Back" type="Button" parent="."]
+layout_mode = 0
+offset_left = 364.0
+offset_top = 24.0
+offset_right = 446.0
+offset_bottom = 64.0
+text = "Back"
+
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 100.0
+offset_right = 466.0
+offset_bottom = 548.0
+tab_alignment = 1
+
+[node name="Upgrades" type="Control" parent="TabContainer"]
+layout_mode = 2
+
+[node name="StarPower" type="Control" parent="TabContainer/Upgrades"]
+anchors_preset = 0
+offset_left = 65.0
+offset_top = 1.0
+offset_right = 451.0
+offset_bottom = 88.0
+
+[node name="StarPower" parent="TabContainer/Upgrades/StarPower" instance=ExtResource("5_awjm0")]
+position = Vector2(41, 42)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Upgrades/StarPower"]
+layout_mode = 0
+offset_left = 83.0
+offset_top = 1.0
+offset_right = 365.0
+offset_bottom = 109.0
+
+[node name="Label" type="Label" parent="TabContainer/Upgrades/StarPower/VBoxContainer"]
+layout_mode = 2
+text = "Meteor Upgrade"
+
+[node name="Label2" type="Label" parent="TabContainer/Upgrades/StarPower/VBoxContainer"]
+layout_mode = 2
+text = "Description"
+label_settings = SubResource("LabelSettings_j4jt2")
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="TabContainer/Upgrades/StarPower/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+nine_patch_stretch = true
+texture_under = ExtResource("3_wrt3b")
+texture_over = ExtResource("4_dlirp")
+texture_progress = ExtResource("5_8vptd")
+
+[node name="Button" type="Button" parent="TabContainer/Upgrades/StarPower/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="CoinShowerPower" parent="TabContainer/Upgrades" instance=ExtResource("2_2q8ms")]
+position = Vector2(65, 154)
+
+[node name="MagnetPower" parent="TabContainer/Upgrades" instance=ExtResource("3_1658o")]
+position = Vector2(64, 263)
+
+[node name="MulitplierPower" parent="TabContainer/Upgrades" instance=ExtResource("4_y0cd3")]
+position = Vector2(65, 366)
+
+[node name="Characters" type="ScrollContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Control" type="Control" parent="TabContainer/Characters"]
+custom_minimum_size = Vector2(400, 1000)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Characters/Control"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 52.0
+offset_right = 430.0
+offset_bottom = 401.0
+theme_override_constants/separation = 50
+
+[node name="Gliders" type="ScrollContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Control" type="Control" parent="TabContainer/Gliders"]
+custom_minimum_size = Vector2(400, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Gliders/Control"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 52.0
+offset_right = 430.0
+offset_bottom = 401.0
+theme_override_constants/separation = 50

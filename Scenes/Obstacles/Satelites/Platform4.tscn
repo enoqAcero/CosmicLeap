@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://hnm2qwf222nh"]
+
+[ext_resource type="Texture2D" uid="uid://bhx6agod8fvoj" path="res://Assets/Obstacles/UFO.png" id="1_1gmpe"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bucoh"]
+radius = 63.0079
+
+[node name="Area2D" type="Area2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_1gmpe")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -3)
+shape = SubResource("CircleShape2D_bucoh")

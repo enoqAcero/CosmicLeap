@@ -15,6 +15,10 @@ run/main_scene="res://Scenes/jump.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+SignalManager="*res://Global/SignalManager.gd"
+
 [display]
 
 window/size/viewport_width=480

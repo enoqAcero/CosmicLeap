@@ -5,7 +5,7 @@ var magnet = false
 
 
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if magnet == true:
 		position += (get_parent().get_node("michi").position - position).normalized() * 25
 	position.y += speedY

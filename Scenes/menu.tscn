@@ -1,4 +1,28 @@
-[gd_scene format=3 uid="uid://dn7j1pie1dv7b"]
+[gd_scene load_steps=5 format=3 uid="uid://dn7j1pie1dv7b"]
+
+[ext_resource type="Texture2D" uid="uid://cb341x7rnctuo" path="res://Assets/Logo/CosmicLeap1.png" id="1_1b5vb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lhmue"]
+atlas = ExtResource("1_1b5vb")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ie8m5"]
+atlas = ExtResource("1_1b5vb")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_j3fup"]
+animations = [{
+"frames": [{
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_lhmue")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ie8m5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -7,16 +31,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="Title" type="Label" parent="."]
-layout_mode = 0
-offset_left = 100.0
-offset_top = 6.0
-offset_right = 335.0
-offset_bottom = 84.0
-text = "Jupiter Jump"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="Start" type="Label" parent="."]
 layout_mode = 0
@@ -36,6 +50,10 @@ offset_top = 501.0
 offset_right = 315.0
 offset_bottom = 584.0
 
+[node name="Me" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Me"
+
 [node name="Store" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Store"
@@ -43,3 +61,9 @@ text = "Store"
 [node name="Settings" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Settings"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(240, 116)
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_j3fup")
+autoplay = "default"

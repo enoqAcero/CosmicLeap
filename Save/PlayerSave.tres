@@ -1,60 +1,137 @@
-[gd_resource type="Resource" script_class="Player" load_steps=13 format=3 uid="uid://gnuafa743k1x"]
+[gd_resource type="Resource" script_class="Player" load_steps=30 format=3 uid="uid://gnuafa743k1x"]
 
+[ext_resource type="Script" path="res://Save/GliderResource.gd" id="1_3mtyn"]
 [ext_resource type="Script" path="res://Save/PlayerResource.gd" id="1_i001p"]
-[ext_resource type="Texture2D" uid="uid://cxesvx3xme7oe" path="res://Assets/Skins/Player/espadachinFrente.png" id="2_tvgap"]
+[ext_resource type="Texture2D" uid="uid://pcux2dd3bu75" path="res://Assets/Skins/Glider/paraguasRojo.png" id="2_uddth"]
+[ext_resource type="Texture2D" uid="uid://b6jimhhmypgka" path="res://Assets/Skins/Player/Astronauta/astronautaBlanco.png" id="3_66gdl"]
+[ext_resource type="Texture2D" uid="uid://1mxct5pf4n8o" path="res://Assets/Skins/Glider/paraguasVerde.png" id="3_fkqqm"]
 [ext_resource type="Script" path="res://Save/SkinsResource.gd" id="3_yugwr"]
-[ext_resource type="Texture2D" uid="uid://bg7t8nm0wjdsb" path="res://Assets/michi/Kibble.png" id="4_6ghcy"]
-[ext_resource type="Texture2D" uid="uid://doi6lepfku28u" path="res://Assets/michi/Brush.png" id="5_1rxab"]
-[ext_resource type="Texture2D" uid="uid://b0fjcjcox5umd" path="res://Assets/michi/Ball.png" id="6_ggejp"]
-[ext_resource type="Texture2D" uid="uid://c6kwxhe4bku2h" path="res://Assets/michi/TunaCan.png" id="7_02vbq"]
+[ext_resource type="Texture2D" uid="uid://dj3xsv6a6j26e" path="res://Assets/Skins/Glider/paraguasRosa.png" id="4_a2qvu"]
+[ext_resource type="Texture2D" uid="uid://c3mu1he17suto" path="res://Assets/Skins/Player/Astronauta/astronautaNegro.png" id="4_n41ch"]
+[ext_resource type="Texture2D" uid="uid://xrk1d5ftojpg" path="res://Assets/Skins/Player/Astronauta/astronautaVerde.png" id="5_5r0pt"]
+[ext_resource type="Texture2D" uid="uid://dqr3jyqmg6rti" path="res://Assets/Skins/Player/Astronauta/astronautaAzul.png" id="6_01r3x"]
+[ext_resource type="Texture2D" uid="uid://brgv0sldg7gjv" path="res://Assets/Skins/Player/Astronauta/astronautaRosa.png" id="7_r0a18"]
+[ext_resource type="Texture2D" uid="uid://bxpt4mvtpnag6" path="res://Assets/Skins/Player/Astronauta/astronautaNaranja.png" id="8_axjt8"]
+[ext_resource type="Texture2D" uid="uid://cbtmye7g2t80i" path="res://Assets/Skins/Player/Astronauta/astronautaCamo.png" id="9_0m8e3"]
+[ext_resource type="Texture2D" uid="uid://pq14fh20lxyk" path="res://Assets/Skins/Player/Astronauta/astronautaMexa.png" id="10_jnxgd"]
+[ext_resource type="Texture2D" uid="uid://cwfwbb64jn633" path="res://Assets/Skins/Player/Astronauta/astronautaRobot1.png" id="11_d04x5"]
+[ext_resource type="Texture2D" uid="uid://da7pmj2kt68tg" path="res://Assets/Skins/Player/Astronauta/astronautaRobot2.png" id="12_523w8"]
 
-[sub_resource type="Resource" id="Resource_gv21j"]
-script = ExtResource("3_yugwr")
-skinType = ExtResource("2_tvgap")
-name = "Laser"
-price = 100
+[sub_resource type="Resource" id="Resource_ytj34"]
+script = ExtResource("1_3mtyn")
+skinType = ExtResource("2_uddth")
+name = ""
+price = 0
 owned = true
 active = false
 
-[sub_resource type="Resource" id="Resource_2x8op"]
+[sub_resource type="Resource" id="Resource_praji"]
+script = ExtResource("1_3mtyn")
+skinType = ExtResource("3_fkqqm")
+name = ""
+price = 0
+owned = true
+active = true
+
+[sub_resource type="Resource" id="Resource_63i4t"]
+script = ExtResource("1_3mtyn")
+skinType = ExtResource("4_a2qvu")
+name = ""
+price = 0
+owned = true
+active = false
+
+[sub_resource type="Resource" id="Resource_iuolk"]
 script = ExtResource("3_yugwr")
-skinType = ExtResource("4_6ghcy")
-name = "Kibble"
-price = 100
+skinType = ExtResource("3_66gdl")
+name = "White"
+price = 0
+owned = true
+active = false
+
+[sub_resource type="Resource" id="Resource_ilqmh"]
+script = ExtResource("3_yugwr")
+skinType = ExtResource("4_n41ch")
+name = ""
+price = 0
 owned = false
 active = false
 
-[sub_resource type="Resource" id="Resource_avw3f"]
+[sub_resource type="Resource" id="Resource_0ol2m"]
 script = ExtResource("3_yugwr")
-skinType = ExtResource("5_1rxab")
-name = "Brush"
-price = 100
+skinType = ExtResource("5_5r0pt")
+name = ""
+price = 0
 owned = false
 active = false
 
-[sub_resource type="Resource" id="Resource_aoqou"]
+[sub_resource type="Resource" id="Resource_ewk16"]
 script = ExtResource("3_yugwr")
-skinType = ExtResource("6_ggejp")
-name = "Ball"
-price = 100
-owned = false
+skinType = ExtResource("6_01r3x")
+name = ""
+price = 0
+owned = true
 active = false
 
-[sub_resource type="Resource" id="Resource_bps3j"]
+[sub_resource type="Resource" id="Resource_lmkh0"]
 script = ExtResource("3_yugwr")
-skinType = ExtResource("7_02vbq")
-name = "Tuna"
-price = 200
-owned = false
+skinType = ExtResource("7_r0a18")
+name = ""
+price = 0
+owned = true
+active = false
+
+[sub_resource type="Resource" id="Resource_yd2jc"]
+script = ExtResource("3_yugwr")
+skinType = ExtResource("8_axjt8")
+name = ""
+price = 0
+owned = true
+active = false
+
+[sub_resource type="Resource" id="Resource_e70hl"]
+script = ExtResource("3_yugwr")
+skinType = ExtResource("9_0m8e3")
+name = ""
+price = 0
+owned = true
+active = false
+
+[sub_resource type="Resource" id="Resource_5dewh"]
+script = ExtResource("3_yugwr")
+skinType = ExtResource("10_jnxgd")
+name = ""
+price = 0
+owned = true
+active = true
+
+[sub_resource type="Resource" id="Resource_rb0kf"]
+script = ExtResource("3_yugwr")
+skinType = ExtResource("11_d04x5")
+name = ""
+price = 0
+owned = true
+active = false
+
+[sub_resource type="Resource" id="Resource_8ix77"]
+script = ExtResource("3_yugwr")
+skinType = ExtResource("12_523w8")
+name = ""
+price = 0
+owned = true
 active = false
 
 [resource]
 script = ExtResource("1_i001p")
 highScore = 6454
-coins = 28
-skins = Array[ExtResource("3_yugwr")]([SubResource("Resource_gv21j"), SubResource("Resource_2x8op"), SubResource("Resource_avw3f"), SubResource("Resource_aoqou"), SubResource("Resource_bps3j")])
-StarPowerLvl = 0
+coins = 8060
+skins = Array[ExtResource("3_yugwr")]([SubResource("Resource_iuolk"), SubResource("Resource_ilqmh"), SubResource("Resource_0ol2m"), SubResource("Resource_ewk16"), SubResource("Resource_lmkh0"), SubResource("Resource_yd2jc"), SubResource("Resource_e70hl"), SubResource("Resource_5dewh"), SubResource("Resource_rb0kf"), SubResource("Resource_8ix77")])
+skinIndex = 7
+gliders = Array[ExtResource("1_3mtyn")]([SubResource("Resource_ytj34"), SubResource("Resource_praji"), SubResource("Resource_63i4t")])
+gliderIndex = 1
+StarPowerLvl = 4
 MagnetLvl = 0
 CoinShowerLvl = 0
 MultiplierLvl = 0
 JumpForceLvl = 0
+shieldCount = 2

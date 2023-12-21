@@ -2,15 +2,17 @@ extends Node2D
 
 var rng = RandomNumberGenerator.new()
 
-var paraguasPath = preload("res://Scenes/paraguas.tscn")
+var gliderPath = preload("res://Scenes/Glider.tscn")
 var fuegoPath = preload("res://Scenes/Fuego.tscn")
 var michiLoad = preload("res://Scenes/PlayerCharacter.tscn")
+var shieldPath = preload("res://Scenes/Shield.tscn")
 
 var michiInstance
+var shieldInstance
 var michiSprite
 var michiAnimationPlayer
-var michiStartPos = Vector2(240,600)
-var paraguasSprite
+var michiStartPos = Vector2(240,500)
+var gliderSprite
 var fuegoSprite
 
 var trampolineSprite
@@ -23,12 +25,14 @@ var gameRunning = false
 
 var highScore = 0
 var score = 0
+var prevScore = score
 
 var screenSize : Vector2
 
-var minJumpForce = 4000#1800
+#fuerza de brinco inicial
+var minJumpForce = 1800
 var newMinForce
-var maxJumpForce = 5000
+var maxJumpForce = 8000
 var jumpForce
 var nextJumpForce
 var minBounceFactor = 1
@@ -64,16 +68,20 @@ var prevMichiPos
 
 
 #items
+var startPowerTimer = 3
 var coin = preload("res://Scenes/Obstacles/items/coin.tscn")
 var StarPower = preload("res://Scenes/Obstacles/items/StarPower.tscn")
 var MultiplierPower = preload("res://Scenes/Obstacles/items/MultiplierPower.tscn")
 var MagnetPower = preload("res://Scenes/Obstacles/items/MagnetPower.tscn")
 var CoinShowerPower = preload("res://Scenes/Obstacles/items/CoinShowerPower.tscn")
 
-#obstacles
-var platform1 = preload("res://Scenes/Obstacles/Platforms/Platform1.tscn")
-var platform2 = preload("res://Scenes/Obstacles/Platforms/Platform2.tscn")
-var platform3 = preload("res://Scenes/Obstacles/Platforms/Platform3.tscn")
+#satelites
+var platform1 = preload("res://Scenes/Obstacles/Satelites/Platform1.tscn")
+var platform2 = preload("res://Scenes/Obstacles/Satelites/Platform2.tscn")
+var platform3 = preload("res://Scenes/Obstacles/Satelites/Platform3.tscn")
+var platform4 = preload("res://Scenes/Obstacles/Satelites/Platform4.tscn")
+
+#meteoritos
 var Meteor1 = preload("res://Scenes/Obstacles/Asteroids/Meteor1.tscn")
 var Meteor2 = preload("res://Scenes/Obstacles/Asteroids/Meteor2.tscn")
 var Meteor3 = preload("res://Scenes/Obstacles/Asteroids/Meteor3.tscn")
@@ -87,8 +95,8 @@ var obsScriptPath = preload("res://Scripts/obstacles.gd")
 var items = []
 
 #var Obstacles := [wetSign,cactus,poo,bee,baseball,globo]
-var Obstacles := [platform1, platform2, platform3]
-var ObstaclesMeteor := [Meteor1, Meteor2, Meteor3, Meteor4]
+var Obstacles := [platform1, platform2, platform3, platform4]
+var ObstaclesMeteor := [Meteor1, Meteor2, Meteor3, Meteor4, platform4]
 var Powers := [StarPower, MultiplierPower, MagnetPower, CoinShowerPower]
 
 var obstaclesInstance : Array
@@ -115,6 +123,20 @@ var MagnetPowerActive = false
 var CoinShowerPowerActive = false
 var magnetControl = false
 
+var controlAnimation = false
+
+var dificulty = 1
+var controlDif = false
+var maxDificulty = 10
+var playerVelocity = 1000
+var platMinSpeed = [7,12]
+var meteorMinSpeed = [20,30]
+
+var doubleClick = false
+var shieldActive = false
+var shieldControl = false
+var controlHit = false
+
 func _ready():
 	
 	
@@ -135,12 +157,21 @@ func _ready():
 	$AreaBtnControl.mouse_entered.connect(controlMenu)
 	$AreaBtnControl.mouse_exited.connect(controlMenu2)
 	$Menu.get_node("VBoxContainer/Store").pressed.connect(openStore)
+	$Menu.get_node("VBoxContainer/Me").pressed.connect(openMePage)
 	$Menu.get_node("VBoxContainer/Settings").pressed.connect(openSettings)
 	$store.get_node("Back").pressed.connect(mainMenu)
 	$settings.get_node("Back").pressed.connect(mainMenu)
+	$mePage.get_node("Back").pressed.connect(mainMenu)
 	$CanvasLayer/GameOver.get_node("VBoxContainer/HBoxContainer2/Menu").pressed.connect(exit)
 	$CanvasLayer/GameOver.get_node("VBoxContainer/Video").pressed.connect(video)
+	michiAnimationPlayer.animation_finished.connect(animationFinished)
+	
+	SignalManager.changeSkin.connect(changeSkin)
+	SignalManager.updateMePage.connect(updateMePage)
+	
 
+	
+	
 	
 	
 func newGame():
@@ -201,8 +232,11 @@ func newGame():
 	$CanvasLayer/FloorDistance.text = "0"
 	$CanvasLayer/HighScore.text = str(playerData.highScore)
 	
-	michiAnimationPlayer.play("idle")
-
+	#update powerup timer
+	$StarPowerTimer.wait_time = startPowerTimer +  playerData.StarPowerLvl
+	print("StarPower Timer:", startPowerTimer +  playerData.StarPowerLvl)
+	$MagnetPowerTimer.wait_time = startPowerTimer +  playerData.MagnetLvl
+	$CoinShowerPowerTimer.wait_time = startPowerTimer +  playerData.CoinShowerLvl
 
 func _process(_delta):
 	#print($Menu.get_node("VBoxContainer/Store"))
@@ -210,10 +244,16 @@ func _process(_delta):
 			michiMinPos = michiInstance.global_position.y
 			
 	if gameRunning == true:
+		
+		if falling== true and controlAnimation == false:
+			michiAnimationPlayer.play("StartFalling")
+			
 		if menuControl == false:
 			$AreaBtnControl.hide()
 			$Menu.visible = false
 			$CanvasLayer/JoyStick.visible = true
+			
+			
 			if cameraStart == false:
 				var direction = $CanvasLayer/JoyStick.posVector
 				if direction:
@@ -249,16 +289,21 @@ func _process(_delta):
 				
 			if falling == true and posMichi > 5500:
 				if controlObstacles == 1:
+					#generador de obstaculos
 					generateObstacles()
 				if controlCoins == 1 and CoinShowerPowerActive == false:
+					#generador de monedas cayendo
 					generateCoins(0)
 			elif falling == false and posMichi > 4000:
 				if controlCoins == 1 and CoinShowerPowerActive == false:
+					#generador de monedas subiendo
 					generateCoins(1)
 					
 		
 			if posMichi > maxHeight:
 				maxHeight = posMichi
+				
+			#cambiar score
 				score = maxHeight/10
 				
 			
@@ -337,30 +382,48 @@ func _process(_delta):
 			
 			
 			
-		#handle powers
-		if StarPowerActive == true:
-			michiInstance.set_collision_layer_value(1, false)
-			michiInstance.set_collision_mask_value(1, false)
-			michiInstance.scale.x = 5
-			michiInstance.scale.y = 5
-		else:
-			michiInstance.scale.x = 2
-			michiInstance.scale.y = 2
-			michiInstance.set_collision_layer_value(1, true)
-			michiInstance.set_collision_mask_value(1, true)
+			#handle powers
+			if StarPowerActive == true:
+				michiInstance.set_collision_layer_value(1, false)
+				michiInstance.set_collision_mask_value(1, false)
+				michiInstance.scale.x = 5
+				michiInstance.scale.y = 5
+			else:
+				michiInstance.scale.x = 2
+				michiInstance.scale.y = 2
+				michiInstance.set_collision_layer_value(1, true)
+				michiInstance.set_collision_mask_value(1, true)
+				
+				
+			if MagnetPowerActive == true:
+				magnetControl = false
+				if magnetControl == false:
+					MagnetPowerFunc()
+					magnetControl = true
 			
-			
-		if MagnetPowerActive == true:
-			magnetControl = false
-			if magnetControl == false:
-				MagnetPowerFunc()
-				magnetControl = true
-		
+						
+			if CoinShowerPowerActive == true:
+				if controlCoins == 1:
+					generateCoins(1)
 					
-		if CoinShowerPowerActive == true:
-			if controlCoins == 1:
-				generateCoins(1)
 			
+		
+			#increase dificulty
+			if controlDif == false and int(score) / 1000 > int(prevScore) / 1000:
+				print("IncreaseDificulty")
+				controlDif = true
+				increaseDificulty()
+				
+			prevScore = score
+				
+			
+			#manejar estado del escudo
+			if shieldActive == true and shieldControl == false:
+				shieldControl = true
+				activateShield()
+				michiInstance.set_collision_layer_value(1, false)
+				michiInstance.set_collision_mask_value(1, false)	
+				
 			
 			
 	else:
@@ -400,8 +463,8 @@ func cleanObstacles():
 func goingUp():
 	michiInstance.scale.x = 2
 	michiInstance.scale.y = 2
-	michiAnimationPlayer.play("idle")
-	paraguasSprite.visible = false
+	michiAnimationPlayer.play("Fly")
+	gliderSprite.visible = false
 	goingUpControl = true
 	
 	if not multiplierCount == 0:
@@ -425,11 +488,13 @@ func goingUp():
 	
 func controlBounceEnter(body):
 	if body.name == "michi":
+		michiAnimationPlayer.play("Jump")
 		readyToBounce = true
 		#$CanvasLayer/FloorDistance.label_settings.font_color = Color("#15fc00")
 	
 func controlBounceExit(body):
 	if body.name == "michi":
+		controlAnimation = false
 		readyToBounce = false
 		bounceFactorControl = true
 		falling = false
@@ -447,8 +512,6 @@ func controlBounceHit(body):
 		
 func controlAnimationEnter(body):
 	if body.name == "michi":
-		michiInstance.scale.x = 2.5
-		michiInstance.scale.y = 1.5
 		trampolineSprite.play("jump")
 func controlAnimationExit(body):
 	if body.name == "michi":
@@ -463,39 +526,46 @@ func generateObstacles():
 		var posX = rng.randi_range(obstacleXpos[0], obstacleXpos[1])
 		var posY = 2000 - posMichi
 		
-		
-		var prob = rng.randi_range(0, 200)
+		#probabilidad de obstaculos y items
+		var prob = rng.randi_range(0, 100)
+		#plataformas
 		if prob < 70:
-			var obs_type = Obstacles[randi() % Obstacles.size()]
+			var obs_type = Obstacles[randi() % (Obstacles.size() - 1)]
+			if prob <= 2:
+				obs_type = platform4
+				
 			var obs = obs_type.instantiate()
 			obs.set_script(obsScriptPath)
 			var obs_x = posX
 			var obs_y = posY
 			obs.global_position = Vector2(obs_x,obs_y)
-			obs.speedX = rng.randf_range(0.2, 1.5)
-			obs.speedY = rng.randf_range(3.5, 4.5)
-			var hue = posMichi/float(score)
-			var color = Color.from_hsv(hue,1,1)
-			obs.modulate = color
+			obs.speedX = rng.randf_range(1, 4)
+			obs.speedY = rng.randf_range(platMinSpeed[0], platMinSpeed[1])
+			
+
+			#var hue = posMichi/float(score)
+			#var color = Color.from_hsv(hue,1,1)
+			#obs.modulate = color
 			addObstacle(obs, 0)
+		#meteoritos
 		if prob >= 70 and prob < 95:
 			var obs_type = ObstaclesMeteor[randi() % Obstacles.size()]
 			var obs = obs_type.instantiate()
 			obs.set_script(obsScriptPath)
-			posY = -posMichi - 1000
-			
+			posY = -posMichi - 900
 			var obs_x = posX
 			var obs_y = posY
 			obs.global_position = Vector2(obs_x,obs_y)
-			obs.speedX = rng.randf_range(0.2, 2)
-			obs.speedY = rng.randf_range(7.5, 9.5)
+			obs.speedX = rng.randf_range(3, 7)
+			obs.speedY = rng.randf_range(meteorMinSpeed[0], meteorMinSpeed[1])
 			obs.scale = Vector2(0.5,0.5)
 			addObstacle(obs, 0)
-		elif prob >=95:# and prob <=100:
+		#items
+		elif prob >=95:
 			var item_type = Powers[randi() % Powers.size()]
 			var item = item_type.instantiate()
 			item.set_script(itemScriptPath)
-			item.speedY = rng.randi_range(4, 7)
+			item.speedY = rng.randf_range(platMinSpeed[0], platMinSpeed[1])
 			item.global_position = Vector2(posX,posY)
 			item.add_to_group("item")
 		
@@ -516,6 +586,7 @@ func generateObstacles():
 			addObstacle(item, 1)
 			
 		controlObstacles = 0
+		
 #initialPos = 0 Down, initalPos = 1 Up
 func generateCoins(initialPos : int):
 	if controlCoins == 1:
@@ -525,7 +596,7 @@ func generateCoins(initialPos : int):
 		var posY
 		var posX = rng.randi_range(coinXpos[0], coinXpos[1])
 		
-		while lastCoinPos - 32 <= posX and lastCoinPos + 32 >= posX:
+		while lastCoinPos - 33 <= posX and lastCoinPos + 33 >= posX:
 			posX = rng.randi_range(coinXpos[0], coinXpos[1])
 			
 		lastCoinPos = posX
@@ -533,11 +604,11 @@ func generateCoins(initialPos : int):
 		var coinSpeed
 		if initialPos == 0:
 			posY = 2000 - posMichi
-			coinSpeed = rng.randi_range(3, 5)
+			coinSpeed = rng.randf_range(platMinSpeed[0], platMinSpeed[1])
 		else:
-			posY = -posMichi - 1000
+			posY = -posMichi - 900
 			if CoinShowerPowerActive == true:
-				coinSpeed = 33
+				coinSpeed = meteorMinSpeed[1]
 			else:
 				coinSpeed = 0
 
@@ -583,7 +654,15 @@ func removeObstacle(obs, control : int):
 		itemsInstance.erase(obs)
 		
 func hitObstacle(body): 
-	if body.name == "michi":
+	
+	if body.name == "michi" and shieldActive == true:
+		controlHit = true
+		shieldActive = false
+		shieldInstance.name = "tempNameShield"
+		shieldInstance.queue_free()
+		$ShieldOffTimer.start()
+	
+	if body.name == "michi" and shieldActive == false and controlHit == false:
 		gameOver()	
 	
 func collect(body, obs):
@@ -607,8 +686,9 @@ func handleItemCollection(item):
 		removeObstacle(item, 1)
 		
 	elif item.is_in_group("MultiplierPower"):
-		multiplierCount += 1
-		multiplier += 0.1
+		var mult = playerData.MultiplierLvl + 1
+		multiplierCount += 1 * mult
+		multiplier += 0.1 * mult
 		$CanvasLayer/Multiplier.text = str(multiplierCount)
 		removeObstacle(item, 1)
 	elif item.is_in_group("StarPower"):
@@ -623,11 +703,12 @@ func handleItemCollection(item):
 		CoinShowerPowerActive = true
 		removeObstacle(item, 1)
 		
+#que tan seguido salen los obstaculos
 func _on_obstacle_timer_timeout():
 	if gameRunning == true:
 		randomize()
-		var minTime = 0.7
-		var maxTime = 1.5
+		var minTime = 1
+		var maxTime = 2
 		controlObstacles = 1 
 		$ObstacleTimer.set_wait_time(rng.randf_range(minTime, maxTime))
 		
@@ -675,7 +756,7 @@ func exit():
 		
 func addMichi():
 	
-	var paraguas = paraguasPath.instantiate()
+	var glider = gliderPath.instantiate()
 	var fuego = fuegoPath.instantiate()
 	
 	var michi
@@ -688,34 +769,74 @@ func addMichi():
 	michiInstance = michi
 	michiInstance.name = "michi"
 	
-	paraguas.global_position = Vector2(-9,-31)
-	paraguas.name = "paraguas"
-	paraguas.z_index = -1
-	michiInstance.add_child(paraguas)
+	glider.global_position = Vector2(0,-10)
+	glider.name = "glider"
+	glider.z_index = -1
+	michiInstance.add_child(glider)
+
 	
 	fuego.global_position = Vector2(-5,13)
 	fuego.name = "fuego"
 	fuego.z_index = -1
 	michiInstance.add_child(fuego)
 	
-	paraguasSprite = michiInstance.get_node("paraguas").get_node("AnimatedSprite2D")
-	paraguasSprite.visible = false
+	gliderSprite = michiInstance.get_node("glider").get_node("Sprite2D")
+	if $store.visible == true or $mePage.visible == true:
+		gliderSprite.visible = true
+	else:
+		gliderSprite.visible = false
+	var gliderIndex = playerData.gliderIndex
+	gliderSprite.texture = playerData.gliders[gliderIndex].skinType
+	
 	fuegoSprite = michiInstance.get_node("fuego").get_node("AnimatedSprite2D")
 	fuegoSprite.visible = false
 	
 	michiSprite = michiInstance.get_node("Sprite2D")
 	michiAnimationPlayer = michiInstance.get_node("AnimationPlayer")
-	michiSprite.texture =  playerData.skins[0].skinType
-	michiAnimationPlayer.play("idle")
+	var index = playerData.skinIndex
+	michiSprite.texture =  playerData.skins[index].skinType
 
+	
+	
 
+func changeSkin():
+	michiInstance.name = "tempNameMichi"
+	michiInstance.queue_free()
+	loadData()
+	michiInstance.force(400)
+	michiInstance.bControl(false)
 
+func activateShield():
+	var shield = shieldPath.instantiate()
+	shield.global_position = Vector2(0,0)
+	shield.name = "shield"
+	shield.z_index = -2
+	michiInstance.add_child(shield)
+	shieldInstance = shield
+	playerData.shieldCount -= 1
+	
+	
+func updateMePage():
+	for btn in $mePage.btnInstanceChar:
+		btn.queue_free()
+	$mePage.btnInstanceChar.clear()
+	for btn in $mePage.btnInstanceGlider:
+		btn.queue_free()
+	$mePage.btnInstanceGlider.clear()
+	for hbox in $mePage.hboxInstance:
+		hbox.queue_free()
+	$mePage.hboxInstance.clear()
+	
+	$mePage.addCharacters()
+	$mePage.addGliders()
+	
+	
 func goingDown():
 	#michiAnimationPlayer.stop()
 	michiInstance.scale.x = 2
 	michiInstance.scale.y = 2
 	#michiSprite.play("WalkingDown")
-	paraguasSprite.visible = true
+	gliderSprite.visible = true
 	#paraguasSprite.play("default")
 	fallingControl = true
 	goingUpControl = false
@@ -746,6 +867,7 @@ func _on_down_body_exited(body):
 	if body.name == "michi":
 		cameraUpControl = false
 
+
 func getName(itemName : String) -> String:
 	var result = ""
 	for letter in itemName:
@@ -763,6 +885,7 @@ func openStore():
 	gameRunning = false
 	$Menu.hide()
 	$store.show()
+	gliderSprite.visible = true
 	
 func openSettings():
 	michiInstance.force(400)
@@ -773,6 +896,7 @@ func openSettings():
 	gameRunning = false
 	$Menu.hide()
 	$settings.show()
+	gliderSprite.visible = true
 
 func mainMenu():
 	menuControl = false
@@ -783,7 +907,10 @@ func mainMenu():
 	$AreaBtnControl/CollisionShape2D.scale.y = 1
 	$store.hide()
 	$settings.hide()
+	$mePage.hide()
 	$Menu.show()
+	gliderSprite.visible = false
+	newGame()
 	
 	
 
@@ -791,23 +918,38 @@ func controlMenu():
 	menuControl = true
 func controlMenu2():
 	menuControl = false
+	
+	
+func openMePage():
+	$AreaBtnControl/CollisionShape2D.scale.x = 10
+	$AreaBtnControl/CollisionShape2D.scale.y = 15
+	michiInstance.force(400)
+	michiInstance.bControl(false)
+	menuControl = true
+	gameRunning = false
+	$Menu.hide()
+	$mePage.show()
+	gliderSprite.visible = true
 
 
 func _on_coin_timer_timeout():
 	randomize()
 	var minTime
 	var maxTime
+	#generar monedas cayendo
 	if gameRunning == true and falling == true:
 		minTime = 0.5
 		maxTime = 1.2
 		controlCoins = 1 
 		$CoinTimer.set_wait_time(rng.randf_range(minTime, maxTime))
+	#generar monedas subiendo
 	else:
 		minTime = 0.06
 		maxTime = 0.1
 		controlCoins = 1 
 		$CoinTimer.set_wait_time(rng.randf_range(minTime, maxTime))
 		
+	#generar monedas cayendo
 	if gameRunning == true and falling == true and CoinShowerPowerActive == true:
 		minTime = 0.06
 		maxTime = 0.1
@@ -823,3 +965,50 @@ func _on_magnet_power_timer_timeout():
 
 func _on_coin_shower_power_timer_timeout():
 	CoinShowerPowerActive = false
+
+func animationFinished(anim_name):
+	if anim_name == "StartFalling":
+		controlAnimation = true
+		michiAnimationPlayer.play("Falling")
+	
+	
+func increaseDificulty():
+	if dificulty < maxDificulty:
+		dificulty += 1
+		#velocidad del jugador
+		playerVelocity += 100
+		michiInstance.maxVelocity = playerVelocity
+			
+		for i in range (0, platMinSpeed.size()):
+			#velocidad en y de plataformas
+			platMinSpeed[i] = platMinSpeed[i] * (1.02)
+		for i in range (0, meteorMinSpeed.size()):
+			#velocidad en y de meteoritos
+			meteorMinSpeed[i] = meteorMinSpeed[i] * (1.05)
+		
+		controlDif = false
+
+func _input(_event):
+	if Input.is_action_just_pressed("click"):
+		$DoubleClickTimer.start()
+		if doubleClick == true and shieldActive == false and playerData.shieldCount >= 1:
+			shieldActive = true
+			
+		doubleClick = true
+		
+	
+
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		save()
+	
+
+func _on_double_click_timer_timeout():
+	doubleClick = false
+
+
+func _on_shield_off_timer_timeout():
+	michiInstance.set_collision_layer_value(1, true)
+	michiInstance.set_collision_mask_value(1, true)
+	controlHit = false
+	shieldControl = false

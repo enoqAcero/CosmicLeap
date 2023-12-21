@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4pmqptoh7n8u"]
+
+[ext_resource type="Texture2D" uid="uid://pcux2dd3bu75" path="res://Assets/Skins/Glider/paraguasRojo.png" id="1_mu0hg"]
+
+[node name="Glider" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_mu0hg")

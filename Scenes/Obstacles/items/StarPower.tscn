@@ -1,37 +1,31 @@
 [gd_scene load_steps=8 format=3 uid="uid://1074dokjjjat"]
 
-[ext_resource type="Texture2D" uid="uid://bw3i5iveclpu1" path="res://Assets/Items/michiCoin.png" id="1_u0j04"]
+[ext_resource type="Texture2D" uid="uid://7vhx5sdwkydp" path="res://Assets/Items/fondoItems.png" id="1_lsg35"]
+[ext_resource type="Texture2D" uid="uid://c8y40vonglnbu" path="res://Assets/Items/invencible.png" id="2_t0p8p"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_c8qi3"]
-atlas = ExtResource("1_u0j04")
-region = Rect2(0, 0, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_c81b1"]
+atlas = ExtResource("2_t0p8p")
+region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_10u1b"]
-atlas = ExtResource("1_u0j04")
-region = Rect2(32, 0, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_ppu40"]
+atlas = ExtResource("2_t0p8p")
+region = Rect2(64, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vewji"]
-atlas = ExtResource("1_u0j04")
-region = Rect2(64, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xbirm"]
-atlas = ExtResource("1_u0j04")
-region = Rect2(96, 0, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_uxhgy"]
+atlas = ExtResource("2_t0p8p")
+region = Rect2(128, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_8sc70"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_c8qi3")
+"texture": SubResource("AtlasTexture_c81b1")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_10u1b")
+"texture": SubResource("AtlasTexture_ppu40")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_vewji")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xbirm")
+"texture": SubResource("AtlasTexture_uxhgy")
 }],
 "loop": true,
 "name": &"default",
@@ -39,15 +33,21 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_uofli"]
-radius = 14.0357
+radius = 38.0132
 
 [node name="StarPower" type="Area2D"]
 collision_layer = 3
 collision_mask = 3
 
+[node name="FondoItems" type="Sprite2D" parent="."]
+position = Vector2(0, 2)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("1_lsg35")
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_8sc70")
+autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -1)
+position = Vector2(-1, 1)
 shape = SubResource("CircleShape2D_uofli")

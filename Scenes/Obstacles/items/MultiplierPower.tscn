@@ -1,37 +1,52 @@
-[gd_scene load_steps=8 format=3 uid="uid://cs6a4y3jeh2sl"]
+[gd_scene load_steps=11 format=3 uid="uid://cs6a4y3jeh2sl"]
 
-[ext_resource type="Texture2D" uid="uid://bw3i5iveclpu1" path="res://Assets/Items/michiCoin.png" id="1_px6hl"]
+[ext_resource type="Texture2D" uid="uid://7vhx5sdwkydp" path="res://Assets/Items/fondoItems.png" id="1_ao2lk"]
+[ext_resource type="Texture2D" uid="uid://c2fbn4rxwxbpy" path="res://Assets/Items/multiplier.png" id="2_lq5j4"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_c8qi3"]
-atlas = ExtResource("1_px6hl")
-region = Rect2(0, 0, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ub3e"]
+atlas = ExtResource("2_lq5j4")
+region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_10u1b"]
-atlas = ExtResource("1_px6hl")
-region = Rect2(32, 0, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_gk5t7"]
+atlas = ExtResource("2_lq5j4")
+region = Rect2(64, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vewji"]
-atlas = ExtResource("1_px6hl")
-region = Rect2(64, 0, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_t6l3y"]
+atlas = ExtResource("2_lq5j4")
+region = Rect2(128, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xbirm"]
-atlas = ExtResource("1_px6hl")
-region = Rect2(96, 0, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_o0e5t"]
+atlas = ExtResource("2_lq5j4")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7u7pr"]
+atlas = ExtResource("2_lq5j4")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_040xd"]
+atlas = ExtResource("2_lq5j4")
+region = Rect2(320, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_8sc70"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_c8qi3")
+"texture": SubResource("AtlasTexture_6ub3e")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_10u1b")
+"texture": SubResource("AtlasTexture_gk5t7")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_vewji")
+"texture": SubResource("AtlasTexture_t6l3y")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xbirm")
+"texture": SubResource("AtlasTexture_o0e5t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7u7pr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_040xd")
 }],
 "loop": true,
 "name": &"default",
@@ -39,15 +54,20 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_uofli"]
-radius = 14.0357
+radius = 37.0
 
 [node name="MulitplierPower" type="Area2D"]
 collision_layer = 3
 collision_mask = 3
 
+[node name="FondoItems" type="Sprite2D" parent="."]
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("1_ao2lk")
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(1.1, 1.1)
 sprite_frames = SubResource("SpriteFrames_8sc70")
+autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -1)
 shape = SubResource("CircleShape2D_uofli")

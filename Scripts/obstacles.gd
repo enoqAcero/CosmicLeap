@@ -16,7 +16,7 @@ func _ready():
 	
 	$".".body_entered.connect(bodyEntered)
 
-func _process(_delta):
+func _physics_process(_delta):
 	position.y += speedY
 	
 	if control == 0:

@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://c6btyced53vdh"]
+
+[ext_resource type="Texture2D" uid="uid://7vhx5sdwkydp" path="res://Assets/Items/fondoItems.png" id="1_1xs18"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1_1xs18")

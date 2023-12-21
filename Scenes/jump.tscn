@@ -1,13 +1,15 @@
-[gd_scene load_steps=14 format=3 uid="uid://bce0sjufq2vpv"]
+[gd_scene load_steps=16 format=3 uid="uid://bce0sjufq2vpv"]
 
 [ext_resource type="Script" path="res://Scripts/jump.gd" id="1_8coxb"]
 [ext_resource type="PackedScene" uid="uid://cjhwl25kc14sd" path="res://Scenes/game_over.tscn" id="2_8lq24"]
 [ext_resource type="Texture2D" uid="uid://cp27snuwgp2kp" path="res://Assets/Background/backgroundSuelo.png" id="2_prn5v"]
+[ext_resource type="PackedScene" uid="uid://iosvo5tbxubl" path="res://Scenes/background.tscn" id="3_lkips"]
 [ext_resource type="PackedScene" uid="uid://cnqryqp4o2pwv" path="res://Scenes/JoyStick.tscn" id="3_m7bn0"]
 [ext_resource type="PackedScene" uid="uid://bdytui0mv5wvs" path="res://Scenes/floor.tscn" id="4_o4pvo"]
 [ext_resource type="PackedScene" uid="uid://dn7j1pie1dv7b" path="res://Scenes/menu.tscn" id="6_eye58"]
 [ext_resource type="PackedScene" uid="uid://bmus7qr2lr2hc" path="res://Scenes/store.tscn" id="7_ajhnr"]
 [ext_resource type="PackedScene" uid="uid://c3e78b61i72l2" path="res://Scenes/settings.tscn" id="8_ilwty"]
+[ext_resource type="PackedScene" uid="uid://b5ttpy6wtets0" path="res://Scenes/mePage.tscn" id="9_2aixp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4n8kq"]
 size = Vector2(343.5, 2237)
@@ -22,23 +24,19 @@ size = Vector2(2228, 388)
 size = Vector2(2255, 321)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_slx8m"]
-size = Vector2(164, 74)
+size = Vector2(164, 109)
 
 [node name="Jump" type="Node2D" groups=["Coin", "CoinShower", "MagnetPower", "MultiplierPower", "StarPower", "item"]]
 script = ExtResource("1_8coxb")
+metadata/_edit_horizontal_guides_ = [502.0]
 
-[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
-
-[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
-position = Vector2(240, 480)
-motion_mirroring = Vector2(0, 750)
-
-[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+[node name="Suelo" type="Sprite2D" parent="."]
+position = Vector2(240, 426)
+scale = Vector2(1, 1.13867)
 texture = ExtResource("2_prn5v")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(240, 478)
-texture = ExtResource("2_prn5v")
+[node name="Background" parent="." instance=ExtResource("3_lkips")]
+position = Vector2(358.4, 760.01)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(240, 427)
@@ -124,10 +122,13 @@ visible = false
 [node name="settings" parent="." instance=ExtResource("8_ilwty")]
 visible = false
 
+[node name="mePage" parent="." instance=ExtResource("9_2aixp")]
+visible = false
+
 [node name="AreaBtnControl" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AreaBtnControl"]
-position = Vector2(234, 534)
+position = Vector2(234, 551.5)
 shape = SubResource("RectangleShape2D_slx8m")
 
 [node name="ObstacleTimer" type="Timer" parent="."]
@@ -149,6 +150,13 @@ one_shot = true
 wait_time = 5.0
 one_shot = true
 
+[node name="DoubleClickTimer" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[node name="ShieldOffTimer" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="body_entered" from="Camera2D/Up" to="." method="_on_up_body_entered"]
 [connection signal="body_exited" from="Camera2D/Up" to="." method="_on_up_body_exited"]
 [connection signal="body_entered" from="Camera2D/Down" to="." method="_on_down_body_entered"]
@@ -158,3 +166,5 @@ one_shot = true
 [connection signal="timeout" from="CoinTimer" to="." method="_on_coin_timer_timeout"]
 [connection signal="timeout" from="MagnetPowerTimer" to="." method="_on_magnet_power_timer_timeout"]
 [connection signal="timeout" from="CoinShowerPowerTimer" to="." method="_on_coin_shower_power_timer_timeout"]
+[connection signal="timeout" from="DoubleClickTimer" to="." method="_on_double_click_timer_timeout"]
+[connection signal="timeout" from="ShieldOffTimer" to="." method="_on_shield_off_timer_timeout"]
